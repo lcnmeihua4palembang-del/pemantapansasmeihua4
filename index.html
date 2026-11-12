@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>开心小学 • 四年级汉语综合练习 (Gamifikasi SAS)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: LXGW WenKai (Authentic FZKai / Kaiti style) & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=LXGW+WenKai:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Primary FZKai / KaiTi Font Stack */
+    .font-fzkai {
+      font-family: "FZKai-Z03", "FZKai-Z03S", "FZKTJW--GB1-0", "KaiTi", "STKaiti", "BiauKai", "LXGW WenKai", serif;
+    }
+
+    .font-ui {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Dynamic Font Scaling Classes controlled by user toolbar */
+    .fzkai-scale-normal .q-text { font-size: 1.75rem; line-height: 2.6rem; }
+    .fzkai-scale-normal .opt-text { font-size: 1.5rem; line-height: 2.1rem; }
+    .fzkai-scale-normal .story-text { font-size: 1.6rem; line-height: 2.7rem; }
+
+    .fzkai-scale-large .q-text { font-size: 2.15rem; line-height: 3.1rem; }
+    .fzkai-scale-large .opt-text { font-size: 1.75rem; line-height: 2.4rem; }
+    .fzkai-scale-large .story-text { font-size: 1.85rem; line-height: 3rem; }
+
+    .fzkai-scale-xlarge .q-text { font-size: 2.55rem; line-height: 3.6rem; }
+    .fzkai-scale-xlarge .opt-text { font-size: 2rem; line-height: 2.7rem; }
+    .fzkai-scale-xlarge .story-text { font-size: 2.15rem; line-height: 3.4rem; }
+
+    @media (max-width: 640px) {
+      .fzkai-scale-normal .q-text { font-size: 1.4rem; line-height: 2.1rem; }
+      .fzkai-scale-normal .opt-text { font-size: 1.25rem; line-height: 1.8rem; }
+      .fzkai-scale-normal .story-text { font-size: 1.3rem; line-height: 2.2rem; }
+
+      .fzkai-scale-large .q-text { font-size: 1.65rem; line-height: 2.4rem; }
+      .fzkai-scale-large .opt-text { font-size: 1.45rem; line-height: 2rem; }
+      .fzkai-scale-large .story-text { font-size: 1.5rem; line-height: 2.5rem; }
+
+      .fzkai-scale-xlarge .q-text { font-size: 1.9rem; line-height: 2.7rem; }
+      .fzkai-scale-xlarge .opt-text { font-size: 1.65rem; line-height: 2.2rem; }
+      .fzkai-scale-xlarge .story-text { font-size: 1.7rem; line-height: 2.8rem; }
+    }
+
+    /* Visual Animations for Correct (Green) & Wrong (Red) */
+    @keyframes popSuccess {
+      0% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.65); }
+      45% { transform: scale(1.03); box-shadow: 0 0 0 14px rgba(22, 163, 74, 0); }
+      100% { transform: scale(1); box-shadow: 0 6px 20px -4px rgba(22, 163, 74, 0.35); }
+    }
+
+    @keyframes shakeError {
+      0%, 100% { transform: translateX(0); }
+      18% { transform: translateX(-10px); }
+      36% { transform: translateX(10px); }
+      54% { transform: translateX(-8px); }
+      72% { transform: translateX(8px); }
+      88% { transform: translateX(-4px); }
+    }
+
+    @keyframes badgeSlideIn {
+      0% { opacity: 0; transform: translateY(10px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes pulseGlowGreen {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45); }
+      50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0.15); }
+    }
+
+    .anim-correct {
+      animation: popSuccess 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .anim-wrong {
+      animation: shakeError 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
+    }
+
+    .anim-banner {
+      animation: badgeSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Custom Scrollbar for Reading Scrollbox & Sidebar */
+    .custom-scrollbox::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .custom-scrollbox::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .custom-scrollbox::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+      border: 2px solid #f1f5f9;
+    }
+    .custom-scrollbox::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-ui min-h-screen flex flex-col fzkai-scale-large selection:bg-amber-200 selection:text-amber-950">
+
+  <!-- Confetti Layer -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- TOP HEADER: Paket Soal Selector & Gamification HUD -->
+  <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-30">
+    <!-- Top-Right Credit Title (Selalu Tampil di Kanan Atas) -->
+    <div class="bg-gradient-to-r from-slate-800 via-slate-900 to-slate-800 text-amber-300 px-3 sm:px-6 py-1 flex justify-end items-center border-b border-slate-700/60">
+      <span class="text-[11px] sm:text-xs font-bold tracking-wide">
+        by lcnpalembang-08994477998
+      </span>
+    </div>
+
+    <div class="max-w-[1440px] mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Left: Mobile Sidebar Toggle & School Title -->
+      <div class="flex items-center gap-2.5">
+        <button id="mobile-toc-btn" onclick="toggleMobileSidebar()" class="lg:hidden p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition active:scale-95" aria-label="Buka Daftar Isi">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h10"/>
+          </svg>
+        </button>
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center font-fzkai text-xl font-bold shadow-md shadow-amber-500/20">
+            汉
+          </div>
+          <div>
+            <h1 class="font-fzkai text-lg sm:text-xl font-bold text-slate-900 leading-tight">
+              开心小学 • 四年级汉语综合练习
+            </h1>
+            <p class="text-xs text-slate-500 hidden sm:block">SD Maitreyawira Palembang • Pemantapan SAS Interaktif</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Paket Soal Selector (Paling Atas) -->
+      <div class="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shadow-inner order-3 md:order-2 w-full md:w-auto justify-center">
+        <span class="text-xs font-semibold text-slate-500 px-2.5 hidden sm:inline">选择试卷:</span>
+        <button onclick="switchPacket(0)" id="pkt-btn-0" class="pkt-btn flex-1 md:flex-initial px-3.5 sm:px-5 py-2 rounded-xl text-sm sm:text-base font-fzkai font-bold transition-all duration-200">
+          第一套 <span class="font-ui text-xs font-medium opacity-80">(Paket 1)</span>
+        </button>
+        <button onclick="switchPacket(1)" id="pkt-btn-1" class="pkt-btn flex-1 md:flex-initial px-3.5 sm:px-5 py-2 rounded-xl text-sm sm:text-base font-fzkai font-bold transition-all duration-200">
+          第二套 <span class="font-ui text-xs font-medium opacity-80">(Paket 2)</span>
+        </button>
+        <button onclick="switchPacket(2)" id="pkt-btn-2" class="pkt-btn flex-1 md:flex-initial px-3.5 sm:px-5 py-2 rounded-xl text-sm sm:text-base font-fzkai font-bold transition-all duration-200">
+          第三套 <span class="font-ui text-xs font-medium opacity-80">(Paket 3)</span>
+        </button>
+      </div>
+
+      <!-- Right: Gamification Stats & Font Controls -->
+      <div class="flex items-center gap-2 sm:gap-3 order-2 md:order-3">
+        <!-- Score Badge -->
+        <div class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-1.5 rounded-xl font-bold text-sm shadow-sm">
+          <span>⭐</span>
+          <span id="hud-score">0</span>
+          <span class="text-xs font-medium text-emerald-600 hidden sm:inline">分</span>
+        </div>
+
+        <!-- Streak Badge -->
+        <div id="hud-streak-box" class="flex items-center gap-1 bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1.5 rounded-xl font-bold text-sm shadow-sm transition-transform">
+          <span>🔥</span>
+          <span id="hud-streak">0</span>
+        </div>
+
+        <!-- Font Size Control -->
+        <div class="hidden sm:flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200" title="Ukuran Huruf FZKai">
+          <button onclick="setFontScale('normal')" id="font-normal" class="px-2 py-1 text-xs font-bold rounded-lg transition">A</button>
+          <button onclick="setFontScale('large')" id="font-large" class="px-2.5 py-1 text-sm font-bold rounded-lg transition bg-white shadow text-amber-700">A+</button>
+          <button onclick="setFontScale('xlarge')" id="font-xlarge" class="px-2.5 py-1 text-base font-bold rounded-lg transition">A++</button>
+        </div>
+
+        <!-- Sound Toggle -->
+        <button onclick="toggleSound()" id="sound-btn" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition" title="Suara Efek">
+          🔊
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN SPLIT CONTAINER: Left Table of Contents + Right Question Arena -->
+  <div class="flex-1 max-w-[1440px] w-full mx-auto flex relative">
+
+    <!-- Mobile Backdrop -->
+    <div id="sidebar-backdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-30 hidden lg:hidden"></div>
+
+    <!-- LEFT SIDEBAR: Daftar Isi Per Bagian Soal -->
+    <aside id="left-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-80 bg-white border-r border-slate-200 flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-out shadow-xl lg:shadow-none">
+      
+      <!-- Sidebar Header & Progress -->
+      <div class="p-4 border-b border-slate-100 bg-slate-50/70">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-fzkai text-lg font-bold text-slate-800">目录 • Daftar Isi Soal</span>
+          <button onclick="toggleMobileSidebar()" class="lg:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-200">✕</button>
+        </div>
+        <div class="flex items-center justify-between text-xs text-slate-600 mb-1.5">
+          <span>Progres Pengerjaan</span>
+          <span id="sidebar-progress-text" class="font-bold text-amber-700">0 / 43 Soal</span>
+        </div>
+        <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+          <div id="sidebar-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Scrollable TOC Sections -->
+      <div class="flex-1 overflow-y-auto custom-scrollbox p-3.5 space-y-4">
+        
+        <!-- Section 1 TOC: 一、单项选择题 (共 30 题) - 1 Soal / Layar -->
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="font-fzkai font-bold text-base text-slate-900">一、单项选择题</h2>
+            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">1 Soal/Layar</span>
+          </div>
+          <p class="text-xs text-slate-500 mb-2.5">Pilihan Ganda (No. 1 – 30)</p>
+          <div id="toc-sec1-grid" class="grid grid-cols-6 gap-1.5">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Section 2 TOC: 二、选词填空 (共 5 题) - 5 Soal / Layar -->
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80">
+          <div class="flex items-center justify-between mb-1.5">
+            <h2 class="font-fzkai font-bold text-base text-slate-900">二、选词填空</h2>
+            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">5 Soal/Layar</span>
+          </div>
+          <button onclick="navigateToView('sec2', 0)" id="toc-sec2-btn" class="w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between bg-white hover:bg-amber-50 border-slate-200">
+            <div>
+              <div class="font-fzkai font-bold text-sm text-slate-800">第 31 – 35 题</div>
+              <div class="text-[11px] text-slate-500">Semua 5 soal dalam 1 layar</div>
+            </div>
+            <div id="toc-sec2-dots" class="flex gap-1">
+              <!-- 5 mini dots -->
+            </div>
+          </button>
+        </div>
+
+        <!-- Section 3 TOC: 三、连词成句 (共 5 题) - 1 Soal / Layar -->
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="font-fzkai font-bold text-base text-slate-900">三、连词成句</h2>
+            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">1 Soal/Layar</span>
+          </div>
+          <p class="text-xs text-slate-500 mb-2">Susun Kalimat (No. 36 – 40)</p>
+          <div id="toc-sec3-list" class="grid grid-cols-5 gap-1.5">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Section 4 TOC: 四、阅读理解 (共 3 题) - Teks + 3 Soal + Scrollbox / Layar -->
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80">
+          <div class="flex items-center justify-between mb-1.5">
+            <h2 class="font-fzkai font-bold text-base text-slate-900">四、阅读理解</h2>
+            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">1 Layar Lengkap</span>
+          </div>
+          <button onclick="navigateToView('sec4', 0)" id="toc-sec4-btn" class="w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between bg-white hover:bg-amber-50 border-slate-200">
+            <div>
+              <div class="font-fzkai font-bold text-sm text-slate-800">第 41 – 43 题</div>
+              <div class="text-[11px] text-slate-500">Teks Cerita & Scrollbox</div>
+            </div>
+            <div id="toc-sec4-dots" class="flex gap-1">
+              <!-- 3 mini dots -->
+            </div>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Sidebar Footer: Summary & Reset -->
+      <div class="p-3.5 border-t border-slate-200 bg-slate-50 flex gap-2">
+        <button onclick="showSummaryModal()" class="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-sm shadow-sm transition active:scale-95">
+          🏆 Lihat Skor
+        </button>
+        <button onclick="confirmResetPacket()" class="py-2.5 px-3 rounded-xl bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 border border-slate-200 font-semibold text-sm transition" title="Ulangi Paket Ini">
+          🔄
+        </button>
+      </div>
+    </aside>
+
+    <!-- RIGHT MAIN CONTENT: Isi Soal -->
+    <main class="flex-1 p-3 sm:p-6 lg:p-8 flex flex-col justify-between overflow-x-hidden">
+      <div id="question-stage" class="max-w-4xl w-full mx-auto flex-1 flex flex-col">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </main>
+
+  </div>
+
+  <!-- CUSTOM MODAL FOR SCORE SUMMARY / RESET CONFIRMATION (No alert/confirm!) -->
+  <div id="custom-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+    <div id="custom-modal-card" class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform transition-all">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ============================================================================
+     * COMPLETE QUESTION BANK DATA (ALL 3 SETS FROM PEMANTAPAN SAS.PDF)
+     * ============================================================================
+     */
+    const QUIZ_PACKETS = [
+      // ==================== 第一套 (PAKET 1) ====================
+      {
+        id: 0,
+        title: "小学四年级汉语综合练习题（第一套）",
+        label: "第一套",
+        sec1: [
+          { q: "妈妈买了六块（　　），放在桌子上。", opts: ["铅笔", "衣服", "蛋糕", "汽车"], ans: 2, hint: "Kata satuan '块 (kuài)' digunakan untuk kue (蛋糕)." },
+          { q: "今天我和妈妈要去医院看生病的（　　）。", opts: ["奶奶", "蛋糕", "汽车", "本子"], ans: 0, hint: "Yang sakit di rumah sakit adalah nenek (生病的奶奶)." },
+          { q: "坐飞机比坐汽车（　　）。", opts: ["慢", "重", "矮", "快"], ans: 3, hint: "Naik pesawat lebih cepat (快) daripada naik mobil." },
+          { q: "弟弟太累了，所以想（　　）。", opts: ["唱歌", "睡觉", "跑步", "跳舞"], ans: 1, hint: "Terlalu lelah (太累了), jadi ingin tidur (睡觉)." },
+          { q: "这是我姐姐，她今年十三（　　）了。", opts: ["岁", "本", "块", "支"], ans: 0, hint: "Menyatakan umur menggunakan '岁 (suì)'." },
+          { q: "爸爸每天坐火车去（　　）。", opts: ["看书", "睡觉", "上班", "唱歌"], ans: 2, hint: "Ayah naik kereta pergi bekerja (去上班)." },
+          { q: "椅子上有一件红色的（　　）。", opts: ["铅笔", "T恤", "水果", "蛋糕"], ans: 1, hint: "Kata satuan '件 (jiàn)' digunakan untuk pakaian/kaos (T恤)." },
+          { q: "天下雨了，所以我（　　）去游泳。", opts: ["很多", "一定", "最", "没有"], ans: 3, hint: "Karena hujan, saya tidak (没有) pergi berenang." },
+          { q: "谁的铅笔（　　）多？", opts: ["最", "慢", "近", "到"], ans: 0, hint: "'最多 (zuì duō)' berarti paling banyak." },
+          { q: "“你想不想吃汉堡包？”也可以说成：你（　　）吃汉堡包吗？", opts: ["会", "想", "能", "应该"], ans: 1, hint: "Bentuk '想不想' sama artinya dengan '想...吗'." },
+          { q: "姐姐有一辆粉红色的（　　）。", opts: ["飞机", "火车", "船", "自行车"], ans: 3, hint: "Sepeda berwarna merah muda (粉红色的自行车)." },
+          { q: "奶奶（　　）了，我们要去看她。", opts: ["上班", "骑车", "生病", "游泳"], ans: 2, hint: "Nenek sakit (生病), kita harus menjenguknya." },
+          { q: "迈克尔约我一起去（　　）看电影。", opts: ["电影院", "厨房", "学校", "车站"], ans: 0, hint: "Menonton film di bioskop (电影院)." },
+          { q: "爷爷和奶奶住得很（　　），所以坐飞机来。", opts: ["近", "远", "小", "慢"], ans: 1, hint: "Tinggal sangat jauh (远), sehingga naik pesawat." },
+          { q: "妈妈对我说：“桌子上的蛋糕（　　）了一块。”", opts: ["多", "大", "贵", "少"], ans: 3, hint: "Kue di atas meja berkurang (少) satu potong." },
+          { q: "“你喜不喜欢踢足球？”也可以说成：你（　　）踢足球吗？", opts: ["应该", "可以", "喜欢", "一定"], ans: 2, hint: "Bentuk '喜不喜欢' sama artinya dengan '喜欢...吗'." },
+          { q: "因为今天堵车，所以爸爸开得很（　　）。", opts: ["慢", "快", "远", "好"], ans: 0, hint: "Karena macet (堵车), ayah menyetir dengan pelan (慢)." },
+          { q: "你（　　）帮我拿那本书吗？", opts: ["最", "可以", "时候", "同学"], ans: 1, hint: "'你可以...吗？' artinya 'Bisakah kamu...?'." },
+          { q: "我们每天七点上课，我六点半（　　）到学校。", opts: ["没有", "不想", "骑车", "应该"], ans: 3, hint: "Jam 7 masuk kelas, jam 6.30 seharusnya (应该) sampai sekolah." },
+          { q: "姐姐想骑自行车（　　）学校。", opts: ["坐", "听", "去", "吃"], ans: 2, hint: "Naik sepeda pergi ke (去) sekolah." },
+          { q: "你是什么（　　）来的？", opts: ["时候", "同学", "东西", "汽车"], ans: 0, hint: "'什么时候' berarti kapan." },
+          { q: "做了很多工作以后，我觉得很（　　）。", opts: ["甜", "累", "干净", "红"], ans: 1, hint: "Setelah banyak bekerja, merasa sangat lelah (累)." },
+          { q: "今天电影院有了（　　）电影。", opts: ["远", "慢", "乱", "新"], ans: 3, hint: "Bioskop memutar film baru (新电影)." },
+          { q: "爸爸开车送我（　　）学校。", opts: ["坐", "到", "听", "跑"], ans: 1, hint: "'送我到学校' berarti mengantar saya sampai ke sekolah." },
+          { q: "我看（　　）了一件红色的衣服。", opts: ["听", "吃", "见", "走"], ans: 2, hint: "'看见 (kànjiàn)' berarti melihat." },
+          { q: "“这个面包好不好吃？”也可以说成：这个面包（　　）吗？", opts: ["好吃", "贵", "大", "新"], ans: 0, hint: "Bentuk '好不好吃' sama dengan '好吃吗'." },
+          { q: "丽丽有十七（　　）故事书。", opts: ["支", "件", "本", "块"], ans: 2, hint: "Kata satuan untuk buku (故事书) adalah '本 (běn)'." },
+          { q: "迈克尔（　　）我很想去看电影。", opts: ["听", "看", "走", "说"], ans: 3, hint: "Michael berkata (说) ia sangat ingin menonton film." },
+          { q: "今天安妮来（　　）家玩。", opts: ["我", "谁", "什么", "哪儿"], ans: 0, hint: "Annie datang ke rumah saya (我家) bermain." },
+          { q: "爷爷和奶奶明天（　　）来我家。", opts: ["没", "要", "不", "慢"], ans: 1, hint: "Besok kakek dan nenek akan (要) datang ke rumah." }
+        ],
+        sec2: {
+          wordBank: ["同学", "时候", "一定", "所以", "对"],
+          items: [
+            { num: 31, pre: "我妈妈", post: "我说：“今天我想吃水果。”", ans: "对", hint: "'对我说' = berkata kepada saya." },
+            { num: 32, pre: "迈克尔是我的", post: "。", ans: "同学", hint: "Michael adalah teman sekelas (同学) saya." },
+            { num: 33, pre: "因为天下雨了，", post: "我没有去踢足球。", ans: "所以", hint: "Pasangan kata penghubung '因为... 所以...' (karena... maka...)." },
+            { num: 34, pre: "你买的书，我", post: "很喜欢。", ans: "一定", hint: "Buku yang kamu beli, saya pasti (一定) sangat suka." },
+            { num: 35, pre: "我们看电影的", post: "看见了小美。", ans: "时候", hint: "'...的时候' = pada saat / ketika..." }
+          ]
+        },
+        sec3: [
+          { num: 36, tokens: ["蛋糕", "拿了", "桌子上的", "谁"], punct: "？", valid: ["谁拿了桌子上的蛋糕"], hint: "Siapa (谁) yang mengambil (拿了) kue di atas meja (桌子上的蛋糕)?" },
+          { num: 37, tokens: ["喜欢", "看电影", "很", "迈克尔"], punct: "。", valid: ["迈克尔很喜欢看电影"], hint: "Michael (迈克尔) sangat suka (很喜欢) menonton film (看电影)." },
+          { num: 38, tokens: ["去上班", "坐火车", "每天", "爸爸"], punct: "。", valid: ["爸爸每天坐火车去上班", "每天爸爸坐火车去上班"], hint: "Ayah setiap hari (爸爸每天) naik kereta pergi bekerja (坐火车去上班)." },
+          { num: 39, tokens: ["比", "坐汽车", "坐火车", "快"], punct: "。", valid: ["坐火车比坐汽车快"], hint: "Naik kereta (坐火车) lebih cepat daripada (比...快) naik mobil (坐汽车)." },
+          { num: 40, tokens: ["衣服", "椅子上", "有一件", "红色的"], punct: "。", valid: ["椅子上有一件红色的衣服"], hint: "Di atas kursi (椅子上) ada sehelai (有一件) baju merah (红色的衣服)." }
+        ],
+        sec4: {
+          passage: "今天我的同学安妮来我家。妈妈买了六块蛋糕，她把蛋糕放在厨房的桌子上。我们要吃蛋糕的时候，妈妈发现桌子上的蛋糕少了一块。妈妈问我和安妮谁拿了蛋糕，弟弟笑着走过来，嘴里正吃着蛋糕呢！",
+          questions: [
+            { num: 41, q: "谁来到了“我”家？", opts: ["a. 同学安妮", "b. 爷爷和奶奶", "c. 同学迈克尔", "d. 老师"], ans: 0, hint: "Kalimat pertama: 今天我的同学安妮来我家。" },
+            { num: 42, q: "妈妈把蛋糕放在了哪儿？", opts: ["a. 房间的椅子上", "b. 学校的桌子上", "c. 厨房的桌子上", "d. 汽车里"], ans: 2, hint: "Kalimat kedua: 她把蛋糕放在厨房的桌子上。" },
+            { num: 43, q: "是谁拿走了桌子上的一块蛋糕？", opts: ["a. 安妮", "b. 弟弟", "c. “我”", "d. 妈妈"], ans: 1, hint: "Kalimat terakhir: 弟弟笑着走过来，嘴里正吃着蛋糕呢！" }
+          ]
+        }
+      },
+
+      // ==================== 第二套 (PAKET 2) ====================
+      {
+        id: 1,
+        title: "小学四年级汉语综合练习题（第二套）",
+        label: "第二套",
+        sec1: [
+          { q: "妈妈买了（　　）块蛋糕。", opts: ["十三", "六", "二十", "八"], ans: 1, hint: "Sesuai teks bacaan: 妈妈买了六块蛋糕 (6 potong kue)." },
+          { q: "迈克尔很喜欢看（　　）。", opts: ["自行车", "铅笔", "故事书", "电影"], ans: 3, hint: "Michael sangat suka menonton film (看电影)." },
+          { q: "坐火车比坐汽车（　　）。", opts: ["快", "矮", "远", "慢"], ans: 0, hint: "Naik kereta lebih cepat (快) daripada naik mobil." },
+          { q: "奶奶生病了，我们要去（　　）她。", opts: ["骑", "买", "看", "听"], ans: 2, hint: "'看她' di sini berarti menjenguk nenek." },
+          { q: "妈妈开汽车（　　）我去学校。", opts: ["跑", "送", "飞", "跳"], ans: 1, hint: "Ibu menyetir mobil mengantar (送) saya ke sekolah." },
+          { q: "谁的故事书最（　　）？", opts: ["骑", "走", "多", "到"], ans: 2, hint: "'最多' berarti paling banyak." },
+          { q: "我今天不能去看电影，（　　）我要去奶奶家。", opts: ["所以", "虽然", "但是", "因为"], ans: 3, hint: "Menjelaskan alasan: karena (因为) saya harus ke rumah nenek." },
+          { q: "你能不能给爸爸打（　　）？", opts: ["电话", "本子", "蛋糕", "汽车"], ans: 0, hint: "'打电话' berarti menelepon." },
+          { q: "天明有二十四（　　）本子。", opts: ["块", "支", "个", "本"], ans: 2, hint: "Dalam buku teks Kelas 4, kata satuan untuk buku tulis (本子) adalah '个' (二十四个本子)." },
+          { q: "这本故事书真（　　）看。", opts: ["慢", "好", "堵", "累"], ans: 1, hint: "'真好看' berarti sangat bagus/menarik dibaca." },
+          { q: "今天晚上我不（　　）看电视，因为作业还没做完。", opts: ["时候", "同学", "东西", "可以"], ans: 3, hint: "'不可以' berarti tidak boleh (menonton TV karena PR belum selesai)." },
+          { q: "爸爸说坐火车不（　　）车。", opts: ["堵", "游", "跑", "飞"], ans: 0, hint: "'不堵车' berarti tidak macet." },
+          { q: "你知不知道他的家在（　　）？", opts: ["什么", "谁", "哪儿", "多少"], ans: 2, hint: "'在哪儿' berarti di mana." },
+          { q: "姐姐想（　　）自行车去学校。", opts: ["坐", "骑", "听", "吃"], ans: 1, hint: "Mengendarai sepeda menggunakan kata kerja '骑 (qí)'." },
+          { q: "妈妈买给我的手表很（　　）亮。", opts: ["远", "慢", "静", "漂"], ans: 3, hint: "'漂亮 (piàoliang)' berarti cantik/indah." },
+          { q: "今天学校（　　）了一位新老师。", opts: ["来", "去", "走", "飞"], ans: 0, hint: "Hari ini sekolah kedatangan (来) seorang guru baru." },
+          { q: "因为今天下雨，所以我没去（　　）。", opts: ["上班", "看书", "游泳", "打电话"], ans: 2, hint: "Karena hujan, tidak pergi berenang (游泳)." },
+          { q: "这件衣服不大不（　　），非常合适。", opts: ["长", "高", "重", "小"], ans: 3, hint: "'不大不小' berarti tidak terlalu besar dan tidak terlalu kecil (pas)." },
+          { q: "谁拿了桌子（　　）的蛋糕？", opts: ["里", "上", "下", "外"], ans: 1, hint: "'桌子上' berarti di atas meja." },
+          { q: "你会不会（　　）歌？", opts: ["唱", "打", "骑", "踢"], ans: 0, hint: "'唱歌 (chànggē)' berarti menyanyi." },
+          { q: "这本书一定（　　）你的吧？", opts: ["在", "有", "去", "是"], ans: 3, hint: "'一定是你的' berarti pasti milikmu." },
+          { q: "爸爸，您开车别太（　　）！", opts: ["好", "多", "快", "远"], ans: 2, hint: "'别太快' berarti jangan terlalu cepat." },
+          { q: "迈克尔（　　）我一起去买书。", opts: ["约", "听", "走", "看"], ans: 0, hint: "'约我' berarti mengajak saya." },
+          { q: "弟弟不会踢足球，但是他会打（　　）。", opts: ["蛋糕", "篮球", "汽车", "本子"], ans: 1, hint: "Bermain bola basket menggunakan '打篮球'." },
+          { q: "丽莎有十五本故事（　　）。", opts: ["笔", "车", "包", "书"], ans: 3, hint: "'故事书' berarti buku cerita." },
+          { q: "我们可以坐火车，也可以坐（　　）。", opts: ["本子", "蛋糕", "飞机", "衣服"], ans: 2, hint: "Naik pesawat menggunakan '坐飞机'." },
+          { q: "姐姐有一辆（　　）色的自行车。", opts: ["粉红", "远", "快", "累"], ans: 0, hint: "'粉红色' berarti warna merah muda (pink)." },
+          { q: "弟弟在房间里（　　）音乐。", opts: ["吃", "听", "看", "拿"], ans: 1, hint: "'听音乐' berarti mendengarkan musik." },
+          { q: "爷爷和奶奶住得太远了，所以（　　）坐飞机。", opts: ["没", "不", "慢", "应该"], ans: 3, hint: "Tinggal terlalu jauh, jadi sebaiknya/seharusnya (应该) naik pesawat." },
+          { q: "妈妈买的蛋糕真甜，真（　　）吃！", opts: ["累", "远", "好", "慢"], ans: 2, hint: "'真好吃' berarti sangat enak!" }
+        ],
+        sec2: {
+          wordBank: ["应该", "累", "快", "最", "可以"],
+          items: [
+            { num: 31, pre: "我们每天七点上课，我六点半", post: "去学校。", ans: "应该", hint: "Jam 7 masuk kelas, jam 6.30 seharusnya (应该) berangkat." },
+            { num: 32, pre: "你", post: "帮我把那本书拿过来吗？", ans: "可以", hint: "'你可以...吗？' = Bisakah kamu...?" },
+            { num: 33, pre: "做了很多作业以后，我觉得很", post: "。", ans: "累", hint: "Setelah mengerjakan banyak PR, merasa sangat lelah (累)." },
+            { num: 34, pre: "在我们班上，小月的故事书", post: "多。", ans: "最", hint: "'最多' = paling banyak." },
+            { num: 35, pre: "爸爸，您开汽车别太", post: "了！", ans: "快", hint: "Ayah, menyetir mobilnya jangan terlalu cepat (快)!" }
+          ]
+        },
+        sec3: [
+          { num: 36, tokens: ["约我", "看电影", "一起", "迈克尔", "去"], punct: "。", valid: ["迈克尔约我一起去看电影"], hint: "Michael (迈克尔) mengajak saya (约我) bersama pergi menonton film (一起去看电影)." },
+          { num: 37, tokens: ["送我", "开汽车", "每天早上", "妈妈", "去学校"], punct: "。", valid: ["每天早上妈妈开汽车送我去学校", "妈妈每天早上开汽车送我去学校"], hint: "Setiap pagi ibu (每天早上妈妈) menyetir mobil mengantar saya ke sekolah (开汽车送我去学校)." },
+          { num: 38, tokens: ["我们", "奶奶家", "能不能", "去", "今天"], punct: "？", valid: ["今天我们能不能去奶奶家", "我们今天能不能去奶奶家"], hint: "Hari ini bisakah kita (今天我们能不能) pergi ke rumah nenek (去奶奶家)?" },
+          { num: 39, tokens: ["这件", "红色T恤", "不大也不小"], punct: "。", valid: ["这件红色T恤不大也不小"], hint: "Kaos merah ini (这件红色T恤) tidak besar dan tidak kecil (不大也不小)." },
+          { num: 40, tokens: ["放在", "妈妈", "桌子上", "把蛋糕"], punct: "。", valid: ["妈妈把蛋糕放在桌子上"], hint: "Ibu (妈妈) menaruh kue (把蛋糕放在) di atas meja (桌子上)." }
+        ],
+        sec4: {
+          passage: "我的同学迈克尔很喜欢看电影。今天电影院有了新电影。迈克尔说，他很想去看，因为这部电影很好看。他妈妈也让他约我一起去。其实我也很想去，但是今天我和妈妈要去看奶奶。奶奶生病了，我们要去医院看她，所以我今天不能跟迈克尔一起去看电影了。",
+          questions: [
+            { num: 41, q: "迈克尔喜欢做什么？", opts: ["a. 看电影", "b. 踢足球", "c. 骑自行车", "d. 吃蛋糕"], ans: 0, hint: "Kalimat pertama: 我的同学迈克尔很喜欢看电影。" },
+            { num: 42, q: "迈克尔为什么想去看那部新电影？", opts: ["a. 因为电影院很近", "b. 因为这部电影很好看", "c. 因为今天没有作业", "d. 因为不堵车"], ans: 1, hint: "Bacaan: 他很想去看，因为这部电影很好看。" },
+            { num: 43, q: "“我”为什么不能跟迈克尔一起去看电影？", opts: ["a. 因为天下雨了", "b. 因为“我”要做作业", "c. 因为奶奶生病了，“我”和妈妈要去医院看她", "d. 因为“我”太累了"], ans: 2, hint: "Bacaan: 奶奶生病了，我们要去医院看她，所以我今天不能跟迈克尔一起去看电影了。" }
+          ]
+        }
+      },
+
+      // ==================== 第三套 (PAKET 3) ====================
+      {
+        id: 2,
+        title: "小学四年级汉语综合练习题（第三套）",
+        label: "第三套",
+        sec1: [
+          { q: "妈妈在厨房里做（　　）。", opts: ["火车", "自行车", "汽车", "蛋糕"], ans: 3, hint: "Ibu membuat kue (做蛋糕) di dapur." },
+          { q: "迈克尔想约我去（　　）电影。", opts: ["听", "看", "骑", "吃"], ans: 1, hint: "Menonton film menggunakan kata kerja '看 (kàn)'." },
+          { q: "去爷爷家，我们可以坐（　　）。", opts: ["火车", "本子", "铅笔", "衣服"], ans: 0, hint: "Alat transportasi yang dinaiki: naik kereta (坐火车)." },
+          { q: "做了很多工作，我觉得有点儿（　　）。", opts: ["甜", "远", "累", "红"], ans: 2, hint: "Setelah banyak bekerja, merasa sedikit lelah (有点儿累)." },
+          { q: "丽丽有二十个（　　）。", opts: ["飞机", "本子", "汽车", "火车"], ans: 1, hint: "Lili punya 20 buku tulis (二十个本子)." },
+          { q: "姐姐买了一辆粉红色的自行车，她很（　　）。", opts: ["累", "远", "慢", "喜欢"], ans: 3, hint: "Kakak perempuan sangat menyukainya (很喜欢)." },
+          { q: "“今天你妈妈来不来学校？”也可以说成：今天你妈妈来学校（　　）？", opts: ["吗", "吧", "呢", "啊"], ans: 0, hint: "Pertanyaan '来不来' sama artinya dengan '来...吗？'." },
+          { q: "这件红色T恤不大不小，是（　　）的。", opts: ["谁", "哪儿", "我", "什么"], ans: 2, hint: "'是我的' berarti adalah milik saya." },
+          { q: "明天爷爷和奶奶要（　　）我们家。", opts: ["走", "来", "跑", "飞"], ans: 1, hint: "Besok kakek dan nenek akan datang ke (来) rumah kami." },
+          { q: "因为下雨了，（　　）我没有出门。", opts: ["因为", "应该", "但是", "所以"], ans: 3, hint: "Pasangan '因为... 所以...' (karena hujan, maka saya tidak keluar rumah)." },
+          { q: "谁的铅笔最（　　）？", opts: ["少", "到", "走", "听"], ans: 0, hint: "'最少' berarti paling sedikit." },
+          { q: "这本书很好看，你（　　）看看。", opts: ["没", "不", "应该", "慢"], ans: 2, hint: "Buku ini sangat bagus, kamu sebaiknya/harus (应该) membacanya." },
+          { q: "张雨是我的（　　），我们一起上课。", opts: ["医生", "同学", "奶奶", "妈妈"], ans: 1, hint: "Belajar bersama di kelas berarti teman sekelas (同学)." },
+          { q: "要吃蛋糕的（　　），妈妈叫了我。", opts: ["铅笔", "汽车", "衣服", "时候"], ans: 3, hint: "'要吃蛋糕的时候' berarti saat hendak makan kue." },
+          { q: "妈妈买的这块手表真（　　）看。", opts: ["好", "远", "慢", "堵"], ans: 0, hint: "'真好看' berarti sangat bagus/cantik." },
+          { q: "弟弟在房间里踢（　　）。", opts: ["蛋糕", "本子", "足球", "故事书"], ans: 2, hint: "'踢足球' berarti bermain sepak bola." },
+          { q: "我们可以坐汽车，也可以（　　）自行车。", opts: ["坐", "骑", "拿", "吃"], ans: 1, hint: "'骑自行车' berarti mengendarai sepeda." },
+          { q: "迈克尔说这部电影非常（　　）看。", opts: ["好", "重", "坏", "慢"], ans: 0, hint: "'非常好看' berarti sangat bagus/seru ditonton." },
+          { q: "桌子上的蛋糕（　　）了一块。", opts: ["骑", "坐", "少", "唱"], ans: 2, hint: "Kue di atas meja berkurang (少) satu potong." },
+          { q: "爸爸说坐火车比坐汽车（　　），因为不堵车。", opts: ["慢", "矮", "远", "快"], ans: 3, hint: "Tidak macet, sehingga naik kereta lebih cepat (快) dari mobil." },
+          { q: "妈妈送给我一件红色的（　　）。", opts: ["火车", "飞机", "衣服", "汽车"], ans: 2, hint: "Kata satuan '一件' untuk baju (衣服)." },
+          { q: "今天我们要去看望生病的（　　）。", opts: ["奶奶", "蛋糕", "手机", "电脑"], ans: 0, hint: "Menjenguk nenek yang sakit (生病的奶奶)." },
+          { q: "这本故事书你看完了（　　）？", opts: ["呢", "吗", "的", "啊"], ans: 1, hint: "Partikel tanya '吗' di akhir kalimat tanya ya/tidak." },
+          { q: "坐火车不会（　　）车，所以很快。", opts: ["飞", "走", "看", "堵"], ans: 3, hint: "'堵车' berarti macet." },
+          { q: "姐姐想骑自行车去（　　）。", opts: ["学校", "厨房", "蛋糕", "手表"], ans: 0, hint: "Pergi ke sekolah (去学校) naik sepeda." },
+          { q: "天明有八支铅笔，丽莎有十二（　　）铅笔。", opts: ["本", "个", "支", "件"], ans: 2, hint: "Kata satuan untuk pensil (铅笔) adalah '支 (zhī)'." },
+          { q: "爸爸每天开汽车（　　）我上学。", opts: ["听", "送", "看", "吃"], ans: 1, hint: "'送我上学' berarti mengantar saya pergi sekolah." },
+          { q: "这件衣服太贵了，我（　　）买。", opts: ["一定", "最", "可以", "不想"], ans: 3, hint: "Baju ini terlalu mahal, saya tidak ingin (不想) membeli." },
+          { q: "奶奶今天身体不好，她（　　）了。", opts: ["上班", "游泳", "生病", "唱歌"], ans: 2, hint: "Badan tidak enak, nenek sakit (生病)." },
+          { q: "你能给爸爸打（　　）吗？", opts: ["电话", "蛋糕", "铅笔", "自行车"], ans: 0, hint: "'打电话' berarti menelepon." }
+        ],
+        sec2: {
+          wordBank: ["骑", "送", "堵车", "远", "应该"],
+          items: [
+            { num: 31, pre: "姐姐今天想", post: "自行车去学校。", ans: "骑", hint: "'骑自行车' = mengendarai sepeda." },
+            { num: 32, pre: "每天早上妈妈开汽车", post: "我去学校。", ans: "送", hint: "'送我去学校' = mengantar saya ke sekolah." },
+            { num: 33, pre: "坐火车非常好，因为坐火车不", post: "。", ans: "堵车", hint: "Naik kereta sangat bagus karena tidak macet (不堵车)." },
+            { num: 34, pre: "爷爷和奶奶住得很", post: "，所以他们坐飞机来。", ans: "远", hint: "Tinggal sangat jauh (远), jadi naik pesawat." },
+            { num: 35, pre: "我们明天七点有考试，你今晚", post: "早点儿睡觉。", ans: "应该", hint: "Besok ada ujian, malam ini seharusnya (应该) tidur lebih awal." }
+          ]
+        },
+        sec3: [
+          { num: 36, tokens: ["喜欢的", "这本书", "你买给我的", "我一定"], punct: "。", valid: ["你买给我的这本书我一定喜欢的", "这本书你买给我的我一定喜欢的"], hint: "Buku yang kamu belikan untukku ini (你买给我的这本书) pasti kusukai (我一定喜欢的)." },
+          { num: 37, tokens: ["姐姐", "想骑", "粉红色的", "自行车", "去学校"], punct: "。", valid: ["姐姐想骑粉红色的自行车去学校"], hint: "Kakak perempuan ingin (姐姐想) naik sepeda berwarna merah muda (骑粉红色的自行车) ke sekolah (去学校)." },
+          { num: 38, tokens: ["打电话", "给爸爸", "你能不能"], punct: "？", valid: ["你能不能给爸爸打电话"], hint: "Bisakah kamu (你能不能) menelepon ayah (给爸爸打电话)?" },
+          { num: 39, tokens: ["比坐汽车", "坐火车", "快", "因为不堵车"], punct: "。", valid: ["坐火车比坐汽车快，因为不堵车", "坐火车比坐汽车快因为不堵车", "因为不堵车坐火车比坐汽车快"], hint: "Naik kereta lebih cepat dari mobil (坐火车比坐汽车快), karena tidak macet (因为不堵车)." },
+          { num: 40, tokens: ["给我的", "小礼物", "这是", "送", "妈妈"], punct: "。", valid: ["这是妈妈送给我的小礼物"], hint: "Ini adalah (这是) hadiah kecil yang ibu berikan kepadaku (妈妈送给我的小礼物)." }
+        ],
+        sec4: {
+          passage: "你们好！我叫小芳，我今年九岁了。我很喜欢去学校。每天早上妈妈开汽车送我去学校。这是我姐姐，她叫小月，今年十三岁了。昨天妈妈给姐姐买了一辆粉红色的自行车，姐姐非常喜欢，今天她想骑自行车去学校。我爸爸每天坐火车去上班，他说坐火车比坐汽车快，因为坐火车不堵车。",
+          questions: [
+            { num: 41, q: "小芳每天是怎么去学校的？", opts: ["a. 骑自行车去学校", "b. 坐火车去学校", "c. 妈妈开汽车送她去学校", "d. 爸爸开车送她去学校"], ans: 2, hint: "Bacaan: 每天早上妈妈开汽车送我去学校。" },
+            { num: 42, q: "妈妈给姐姐买了一辆什么颜色的自行车？", opts: ["a. 红色的", "b. 粉红色的", "c. 黄色的", "d. 蓝色的"], ans: 1, hint: "Bacaan: 昨天妈妈给姐姐买了一辆粉红色的自行车。" },
+            { num: 43, q: "爸爸为什么选择坐火车去上班？", opts: ["a. 因为坐火车比坐汽车快，不堵车", "b. 因为火车票很便宜", "c. 因为爸爸没有汽车", "d. 因为医院很远"], ans: 0, hint: "Bacaan: 他说坐火车比坐汽车快，因为坐火车不堵车。" }
+          ]
+        }
+      }
+    ];
+
+    /**
+     * ============================================================================
+     * APPLICATION STATE
+     * ============================================================================
+     */
+    const state = {
+      currentPacket: 0,
+      // Current active view:
+      // 'sec1' (index 0..29 -> 1 question per screen)
+      // 'sec2' (index 0 -> all 5 fill-in-the-blank on 1 screen)
+      // 'sec3' (index 0..4 -> 1 sentence ordering per screen)
+      // 'sec4' (index 0 -> reading passage + 3 scrollbox questions on 1 screen)
+      viewSection: 'sec1',
+      viewIndex: 0,
+      soundEnabled: true,
+      fontScale: 'large',
+      // Per-packet progress storage
+      progress: [
+        createEmptyPacketProgress(0),
+        createEmptyPacketProgress(1),
+        createEmptyPacketProgress(2)
+      ]
+    };
+
+    function createEmptyPacketProgress(pktIdx) {
+      const pkt = QUIZ_PACKETS[pktIdx];
+      return {
+        score: 0,
+        streak: 0,
+        // sec1[0..29]: { selected: null | number, isCorrect: null | boolean }
+        sec1: Array.from({ length: 30 }, () => ({ selected: null, isCorrect: null })),
+        // sec2: { activeBlank: 0, answers: [null..null], statuses: [null..null] }
+        sec2: {
+          activeBlank: 0,
+          answers: Array(5).fill(null),
+          statuses: Array(5).fill(null) // null | true | false
+        },
+        // sec3[0..4]: { placedIndices: [], isCorrect: null | boolean }
+        sec3: pkt.sec3.map(() => ({
+          shuffledOrder: shuffleArray(pkt.sec3[0] ? [...Array(10).keys()] : []), // replaced properly below
+          placedIndices: [],
+          isCorrect: null
+        })).map((_, i) => {
+          const len = pkt.sec3[i].tokens.length;
+          return {
+            shuffledOrder: shuffleArray(Array.from({ length: len }, (_, k) => k)),
+            placedIndices: [],
+            isCorrect: null
+          };
+        }),
+        // sec4[0..2]: { selected: null | number, isCorrect: null | boolean }
+        sec4: Array.from({ length: 3 }, () => ({ selected: null, isCorrect: null }))
+      };
+    }
+
+    function shuffleArray(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      // Ensure shuffled order isn't already identical to original order
+      if (a.length > 1 && a.every((v, idx) => v === idx)) {
+        [a[0], a[1]] = [a[1], a[0]];
+      }
+      return a;
+    }
+
+    /**
+     * ============================================================================
+     * SOUND EFFECTS (WEB AUDIO API - NO EXTERNAL URLs)
+     * ============================================================================
+     */
+    let audioCtx = null;
+    function playTone(type) {
+      if (!state.soundEnabled) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const now = audioCtx.currentTime;
+        if (type === 'correct') {
+          // Bright ascending major triad chime
+          [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+            gain.gain.setValueAtTime(0.16, now + idx * 0.07);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.35);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.07);
+            osc.stop(now + idx * 0.07 + 0.36);
+          });
+        } else if (type === 'wrong') {
+          // Gentle two-note low buzz
+          [220, 185].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.14);
+            gain.gain.setValueAtTime(0.11, now + idx * 0.14);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.14 + 0.25);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.14);
+            osc.stop(now + idx * 0.14 + 0.26);
+          });
+        } else if (type === 'click') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.09);
+        }
+      } catch (e) {
+        // Ignore audio errors if blocked by browser policy
+      }
+    }
+
+    /**
+     * ============================================================================
+     * CONFETTI CELEBRATION ENGINE
+     * ============================================================================
+     */
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const cCtx = confettiCanvas.getContext('2d');
+    let confettiParticles = [];
+    let confettiAnimId = null;
+
+    function resizeConfetti() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeConfetti);
+    resizeConfetti();
+
+    function launchConfetti(count = 45) {
+      const colors = ['#16a34a', '#22c55e', '#f59e0b', '#3b82f6', '#ec4899', '#eab308'];
+      for (let i = 0; i < count; i++) {
+        confettiParticles.push({
+          x: window.innerWidth * (0.3 + Math.random() * 0.4),
+          y: window.innerHeight * 0.45,
+          vx: (Math.random() - 0.5) * 14,
+          vy: -Math.random() * 12 - 4,
+          size: Math.random() * 8 + 5,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 12,
+          alpha: 1
+        });
+      }
+      if (!confettiAnimId) {
+        animateConfetti();
+      }
+    }
+
+    function animateConfetti() {
+      cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      confettiParticles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.42; // gravity
+        p.rotation += p.rotSpeed;
+        p.alpha -= 0.015;
+
+        cCtx.save();
+        cCtx.globalAlpha = Math.max(0, p.alpha);
+        cCtx.translate(p.x, p.y);
+        cCtx.rotate((p.rotation * Math.PI) / 180);
+        cCtx.fillStyle = p.color;
+        cCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+        cCtx.restore();
+      });
+
+      confettiParticles = confettiParticles.filter(p => p.alpha > 0 && p.y < confettiCanvas.height + 30);
+      if (confettiParticles.length > 0) {
+        confettiAnimId = requestAnimationFrame(animateConfetti);
+      } else {
+        confettiAnimId = null;
+      }
+    }
+
+    /**
+     * ============================================================================
+     * NAVIGATION, PACKET SWITCHING & UI CONTROLS
+     * ============================================================================
+     */
+    function switchPacket(pktIdx) {
+      playTone('click');
+      state.currentPacket = pktIdx;
+      state.viewSection = 'sec1';
+      state.viewIndex = 0;
+      renderAll();
+    }
+
+    function navigateToView(section, index = 0) {
+      playTone('click');
+      state.viewSection = section;
+      state.viewIndex = index;
+      // Close mobile sidebar if open
+      const sidebar = document.getElementById('left-sidebar');
+      if (!sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+        toggleMobileSidebar();
+      }
+      renderAll();
+    }
+
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('left-sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const isClosed = sidebar.classList.contains('-translate-x-full');
+      if (isClosed) {
+        sidebar.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        backdrop.classList.add('hidden');
+      }
+    }
+
+    function setFontScale(scale) {
+      state.fontScale = scale;
+      document.body.classList.remove('fzkai-scale-normal', 'fzkai-scale-large', 'fzkai-scale-xlarge');
+      document.body.classList.add(`fzkai-scale-${scale}`);
+      ['normal', 'large', 'xlarge'].forEach(s => {
+        const btn = document.getElementById(`font-${s}`);
+        if (btn) {
+          if (s === scale) {
+            btn.className = "px-2.5 py-1 text-sm font-bold rounded-lg transition bg-white shadow text-amber-700";
+          } else {
+            btn.className = "px-2 py-1 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900";
+          }
+        }
+      });
+    }
+
+    function toggleSound() {
+      state.soundEnabled = !state.soundEnabled;
+      document.getElementById('sound-btn').textContent = state.soundEnabled ? '🔊' : '🔇';
+    }
+
+    function updateGamificationStats(isCorrect, points = 10) {
+      const prog = state.progress[state.currentPacket];
+      if (isCorrect) {
+        prog.score += points;
+        prog.streak += 1;
+        playTone('correct');
+        launchConfetti(42);
+      } else {
+        prog.streak = 0;
+        playTone('wrong');
+      }
+      renderHUD();
+      renderSidebar();
+    }
+
+    /**
+     * ============================================================================
+     * RENDER HUD & LEFT TABLE OF CONTENTS
+     * ============================================================================
+     */
+    function renderHUD() {
+      const prog = state.progress[state.currentPacket];
+      document.getElementById('hud-score').textContent = prog.score;
+      document.getElementById('hud-streak').textContent = prog.streak;
+
+      // Packet top tabs styling
+      [0, 1, 2].forEach(idx => {
+        const btn = document.getElementById(`pkt-btn-${idx}`);
+        if (idx === state.currentPacket) {
+          btn.className = "pkt-btn flex-1 md:flex-initial px-3.5 sm:px-5 py-2 rounded-xl text-sm sm:text-base font-fzkai font-bold transition-all duration-200 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/25 scale-[1.02]";
+        } else {
+          btn.className = "pkt-btn flex-1 md:flex-initial px-3.5 sm:px-5 py-2 rounded-xl text-sm sm:text-base font-fzkai font-bold transition-all duration-200 text-slate-600 hover:text-slate-900 hover:bg-white/70";
+        }
+      });
+    }
+
+    function renderSidebar() {
+      const prog = state.progress[state.currentPacket];
+
+      // Calculate total answered out of 43
+      const s1Done = prog.sec1.filter(x => x.isCorrect !== null).length;
+      const s2Done = prog.sec2.statuses.filter(x => x !== null).length;
+      const s3Done = prog.sec3.filter(x => x.isCorrect !== null).length;
+      const s4Done = prog.sec4.filter(x => x.isCorrect !== null).length;
+      const totalDone = s1Done + s2Done + s3Done + s4Done;
+
+      document.getElementById('sidebar-progress-text').textContent = `${totalDone} / 43 Soal`;
+      document.getElementById('sidebar-progress-bar').style.width = `${Math.round((totalDone / 43) * 100)}%`;
+
+      // Section 1 Grid (1..30)
+      const sec1Grid = document.getElementById('toc-sec1-grid');
+      sec1Grid.innerHTML = prog.sec1.map((item, idx) => {
+        const isActive = state.viewSection === 'sec1' && state.viewIndex === idx;
+        let colorClasses = "bg-white text-slate-700 border-slate-200 hover:border-amber-400";
+        if (item.isCorrect === true) {
+          colorClasses = "bg-emerald-600 text-white border-emerald-700 font-bold shadow-xs";
+        } else if (item.isCorrect === false) {
+          colorClasses = "bg-red-600 text-white border-red-700 font-bold shadow-xs";
+        }
+        const activeRing = isActive ? "ring-2 ring-amber-500 ring-offset-1 scale-105 z-10" : "";
+        return `
+          <button onclick="navigateToView('sec1', ${idx})"
+            class="h-8 rounded-lg border text-xs font-semibold flex items-center justify-center transition-all ${colorClasses} ${activeRing}">
+            ${idx + 1}
+          </button>
+        `;
+      }).join('');
+
+      // Section 2 Card (31..35)
+      const sec2Btn = document.getElementById('toc-sec2-btn');
+      const isSec2Active = state.viewSection === 'sec2';
+      sec2Btn.className = `w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between ${
+        isSec2Active
+          ? 'bg-amber-50 border-amber-500 ring-2 ring-amber-400/50'
+          : 'bg-white hover:bg-amber-50/60 border-slate-200'
+      }`;
+      document.getElementById('toc-sec2-dots').innerHTML = prog.sec2.statuses.map(st => {
+        if (st === true) return `<span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>`;
+        if (st === false) return `<span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>`;
+        return `<span class="w-3 h-3 rounded-full bg-slate-200 inline-block"></span>`;
+      }).join('');
+
+      // Section 3 List (36..40)
+      const sec3List = document.getElementById('toc-sec3-list');
+      sec3List.innerHTML = prog.sec3.map((item, idx) => {
+        const isActive = state.viewSection === 'sec3' && state.viewIndex === idx;
+        let colorClasses = "bg-white text-slate-700 border-slate-200 hover:border-amber-400";
+        if (item.isCorrect === true) {
+          colorClasses = "bg-emerald-600 text-white border-emerald-700 font-bold";
+        } else if (item.isCorrect === false) {
+          colorClasses = "bg-red-600 text-white border-red-700 font-bold";
+        }
+        const activeRing = isActive ? "ring-2 ring-amber-500 ring-offset-1 scale-105" : "";
+        return `
+          <button onclick="navigateToView('sec3', ${idx})"
+            class="h-9 rounded-lg border text-xs font-bold flex items-center justify-center transition-all ${colorClasses} ${activeRing}">
+            ${36 + idx}
+          </button>
+        `;
+      }).join('');
+
+      // Section 4 Card (41..43)
+      const sec4Btn = document.getElementById('toc-sec4-btn');
+      const isSec4Active = state.viewSection === 'sec4';
+      sec4Btn.className = `w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between ${
+        isSec4Active
+          ? 'bg-amber-50 border-amber-500 ring-2 ring-amber-400/50'
+          : 'bg-white hover:bg-amber-50/60 border-slate-200'
+      }`;
+      document.getElementById('toc-sec4-dots').innerHTML = prog.sec4.map(item => {
+        if (item.isCorrect === true) return `<span class="w-3.5 h-3.5 rounded-full bg-emerald-500 inline-block"></span>`;
+        if (item.isCorrect === false) return `<span class="w-3.5 h-3.5 rounded-full bg-red-500 inline-block"></span>`;
+        return `<span class="w-3.5 h-3.5 rounded-full bg-slate-200 inline-block"></span>`;
+      }).join('');
+    }
+
+    /**
+     * ============================================================================
+     * RENDER RIGHT STAGE: 4 DISTINCT INTERACTIVE VIEWS
+     * ============================================================================
+     */
+    function renderAll() {
+      renderHUD();
+      renderSidebar();
+      renderStage();
+    }
+
+    function renderStage() {
+      const stage = document.getElementById('question-stage');
+      if (state.viewSection === 'sec1') {
+        stage.innerHTML = renderSec1Screen();
+      } else if (state.viewSection === 'sec2') {
+        stage.innerHTML = renderSec2Screen();
+      } else if (state.viewSection === 'sec3') {
+        stage.innerHTML = renderSec3Screen();
+      } else if (state.viewSection === 'sec4') {
+        stage.innerHTML = renderSec4Screen();
+      }
+    }
+
+    /**
+     * ----------------------------------------------------------------------------
+     * VIEW 1: 一、单项选择题 (1 SOAL DALAM 1 LAYAR)
+     * ----------------------------------------------------------------------------
+     */
+    function renderSec1Screen() {
+      const pkt = QUIZ_PACKETS[state.currentPacket];
+      const idx = state.viewIndex;
+      const qObj = pkt.sec1[idx];
+      const qState = state.progress[state.currentPacket].sec1[idx];
+      const answered = qState.selected !== null;
+      const optLetters = ['A', 'B', 'C', 'D'];
+
+      // Fill blank dynamically with chosen word if answered
+      let displayQuestion = qObj.q;
+      if (answered) {
+        const chosenWord = qObj.opts[qState.selected];
+        const badgeColor = qState.isCorrect
+          ? 'text-emerald-700 bg-emerald-100 border-emerald-400'
+          : 'text-red-700 bg-red-100 border-red-400 line-through';
+        displayQuestion = qObj.q.replace(
+          '（　　）',
+          `<span class="inline-block px-3 py-0.5 mx-1 rounded-xl border-b-4 font-bold ${badgeColor}">${chosenWord}</span>`
+        );
+      }
+
+      return `
+        <div class="flex flex-col flex-1 justify-between gap-4">
+          <!-- Section Header Banner -->
+          <div class="bg-white rounded-2xl p-4 sm:px-6 border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
+                ${pkt.label} • 一、单项选择题（共 30 题）
+              </span>
+              <h2 class="font-fzkai text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                第 ${idx + 1} 题 <span class="text-slate-400 text-base font-ui font-normal">/ 30</span>
+              </h2>
+            </div>
+            <div class="text-xs sm:text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl">
+              Pilih jawaban yang paling tepat
+            </div>
+          </div>
+
+          <!-- Question Card (1 Soal dalam 1 Layar) -->
+          <div class="bg-white rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-200 shadow-sm flex-1 flex flex-col justify-center">
+            
+            <!-- Large FZKai Question Prompt -->
+            <div class="mb-7 sm:mb-9 p-5 sm:p-7 rounded-2xl bg-amber-50/50 border border-amber-200/70">
+              <p class="font-fzkai q-text font-bold text-slate-900 tracking-wide">
+                <span class="text-amber-600 mr-2">${idx + 1}.</span>${displayQuestion}
+              </p>
+            </div>
+
+            <!-- 4 Large Option Buttons -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+              ${qObj.opts.map((optText, oIdx) => {
+                let btnStyle = "bg-slate-50 hover:bg-amber-50 border-slate-200 hover:border-amber-400 text-slate-800";
+                let letterStyle = "bg-white border-slate-300 text-slate-700";
+                let animClass = "";
+                let statusIcon = "";
+
+                if (answered) {
+                  if (oIdx === qObj.ans) {
+                    // Always highlight correct answer in vivid GREEN
+                    btnStyle = "bg-emerald-600 border-emerald-700 text-white shadow-lg shadow-emerald-600/25";
+                    letterStyle = "bg-white text-emerald-700 border-white font-extrabold";
+                    statusIcon = `<span class="text-2xl ml-auto">✅</span>`;
+                    if (qState.selected === oIdx) animClass = "anim-correct";
+                  } else if (oIdx === qState.selected && !qState.isCorrect) {
+                    // Highlight chosen wrong answer in vivid RED
+                    btnStyle = "bg-red-600 border-red-700 text-white shadow-lg shadow-red-600/25";
+                    letterStyle = "bg-white text-red-700 border-white font-extrabold";
+                    statusIcon = `<span class="text-2xl ml-auto">❌</span>`;
+                    animClass = "anim-wrong";
+                  } else {
+                    btnStyle = "bg-slate-100/70 border-slate-200 text-slate-400 opacity-65";
+                    letterStyle = "bg-slate-200 border-slate-300 text-slate-400";
+                  }
+                }
+
+                return `
+                  <button onclick="answerSec1(${oIdx})" ${answered ? 'disabled' : ''}
+                    class="p-4 sm:p-5 rounded-2xl border-2 text-left flex items-center gap-4 transition-all duration-200 active:scale-[0.98] ${btnStyle} ${animClass}">
+                    <span class="w-11 h-11 rounded-xl border-2 flex items-center justify-center font-ui text-lg font-bold shrink-0 ${letterStyle}">
+                      ${optLetters[oIdx]}
+                    </span>
+                    <span class="font-fzkai opt-text font-bold">${optText}</span>
+                    ${statusIcon}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Immediate Right/Wrong Feedback Banner -->
+            ${answered ? renderImmediateFeedbackBanner(
+              qState.isCorrect,
+              `Jawaban Benar: ${optLetters[qObj.ans]}. ${qObj.opts[qObj.ans]}`,
+              qObj.hint
+            ) : ''}
+          </div>
+
+          <!-- Bottom Navigation Bar -->
+          <div class="flex items-center justify-between gap-3 pt-1">
+            <button onclick="prevScreen()" ${idx === 0 ? 'disabled' : ''}
+              class="px-5 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center gap-2 border transition ${
+                idx === 0
+                  ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+                  : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300 shadow-xs active:scale-95'
+              }">
+              ← <span class="font-fzkai">上一题</span> <span class="hidden sm:inline">(Sebelumnya)</span>
+            </button>
+
+            <button onclick="nextScreen()"
+              class="px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-md shadow-amber-500/20 transition active:scale-95">
+              <span class="font-fzkai">${idx === 29 ? '进入第二部分' : '下一题'}</span>
+              <span class="hidden sm:inline">(${idx === 29 ? 'Bagian II' : 'Selanjutnya'})</span> →
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function answerSec1(optIdx) {
+      const pkt = QUIZ_PACKETS[state.currentPacket];
+      const qObj = pkt.sec1[state.viewIndex];
+      const qState = state.progress[state.currentPacket].sec1[state.viewIndex];
+      if (qState.selected !== null) return;
+
+      qState.selected = optIdx;
+      qState.isCorrect = (optIdx === qObj.ans);
+      updateGamificationStats(qState.isCorrect, 10);
+      renderStage();
+    }
+
+    /**
+     * ----------------------------------------------------------------------------
+     * VIEW 2: 二、选词填空 (5 SOAL DALAM 1 LAYAR)
+     * ----------------------------------------------------------------------------
+     */
+    function renderSec2Screen() {
+      const pkt = QUIZ_PACKETS[state.currentPacket];
+      const sec2Data = pkt.sec2;
+      const sec2State = state.progress[state.currentPacket].sec2;
+
+      return `
+        <div class="flex flex-col flex-1 justify-between gap-4">
+          <!-- Header -->
+          <div class="bg-white rounded-2xl p-4 sm:px-6 border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2.5 py-1 rounded-lg">
+                ${pkt.label} • 二、选词填空（共 5 题）
+              </span>
+              <h2 class="font-fzkai text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                第 31 – 35 题 <span class="text-sm font-ui font-normal text-slate-500">(5 Soal dalam 1 Layar)</span>
+              </h2>
+            </div>
+            <button onclick="resetSec2()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold transition">
+              🔄 Reset Bagian II
+            </button>
+          </div>
+
+          <!-- Sticky Word Bank (词库) -->
+          <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 sm:p-5 border-2 border-purple-200 shadow-xs">
+            <div class="flex items-center justify-between mb-2.5">
+              <span class="text-xs sm:text-sm font-bold text-purple-800">
+                📦 Pilihan Kata (词库) — Klik nomor soal lalu pilih kata di bawah:
+              </span>
+              <span class="text-xs text-purple-600 font-semibold">
+                Kotak Aktif: No. ${31 + sec2State.activeBlank}
+              </span>
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5">
+              ${sec2Data.wordBank.map((word) => {
+                // Check if this word is already correctly locked in one of the 5 items
+                const lockedCorrect = sec2State.answers.some((ans, i) => ans === word && sec2State.statuses[i] === true);
+                return `
+                  <button onclick="selectSec2Word('${word}')"
+                    class="px-5 py-2.5 rounded-2xl font-fzkai opt-text font-bold border-2 transition-all active:scale-95 ${
+                      lockedCorrect
+                        ? 'bg-emerald-100 border-emerald-400 text-emerald-800 opacity-75'
+                        : 'bg-white hover:bg-purple-600 hover:text-white hover:border-purple-700 border-purple-300 text-slate-900 shadow-sm'
+                    }">
+                    ${word} ${lockedCorrect ? '✓' : ''}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- All 5 Fill-in-the-Blank Questions on 1 Screen -->
+          <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-3.5">
+            ${sec2Data.items.map((item, idx) => {
+              const userAns = sec2State.answers[idx];
+              const status = sec2State.statuses[idx]; // null | true | false
+              const isFocused = sec2State.activeBlank === idx && status !== true;
+
+              let rowClass = "bg-slate-50 border-slate-200";
+              let slotClass = isFocused
+                ? "bg-amber-100 border-amber-500 text-amber-900 ring-2 ring-amber-400/50"
+                : "bg-white border-slate-300 text-slate-400";
+              let animClass = "";
+
+              if (status === true) {
+                rowClass = "bg-emerald-50/90 border-emerald-500";
+                slotClass = "bg-emerald-600 border-emerald-700 text-white font-bold";
+                animClass = "anim-correct";
+              } else if (status === false) {
+                rowClass = "bg-red-50/90 border-red-500";
+                slotClass = "bg-red-600 border-red-700 text-white font-bold";
+                animClass = "anim-wrong";
+              }
+
+              return `
+                <div onclick="focusSec2Blank(${idx})"
+                  class="p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer ${rowClass} ${animClass}">
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="font-fzkai q-text font-bold text-slate-900 flex flex-wrap items-center gap-1.5">
+                      <span class="text-purple-700 mr-1">${item.num}.</span>
+                      <span>${item.pre}</span>
+                      <span class="inline-flex items-center justify-center min-w-[5.5rem] px-3.5 py-1 rounded-xl border-2 border-dashed transition-all ${slotClass}">
+                        ${userAns ? userAns : '（ ？ ）'}
+                      </span>
+                      <span>${item.post}</span>
+                    </div>
+
+                    <div class="shrink-0">
+                      ${status === true ? `<span class="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-emerald-600 text-white text-xs sm:text-sm font-bold">✅ Benar!</span>` : ''}
+                      ${status === false ? `<span class="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-red-600 text-white text-xs sm:text-sm font-bold">❌ Salah! (Coba pilih lagi)</span>` : ''}
+                      ${status === null && isFocused ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-500 text-white text-xs font-bold">👈 Aktif</span>` : ''}
+                    </div>
+                  </div>
+
+                  ${status === true ? `
+                    <p class="mt-1.5 text-xs sm:text-sm text-emerald-800 font-medium pl-7">
+                      💡 ${item.hint}
+                    </p>
+                  ` : ''}
+                  ${status === false ? `
+                    <p class="mt-1.5 text-xs sm:text-sm text-red-700 font-semibold pl-7">
+                      ⚠️ Kata "${userAns}" kurang tepat untuk kalimat ini. Klik kata lain dari kotak pilihan di atas!
+                    </p>
+                  ` : ''}
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <!-- Bottom Navigation -->
+          <div class="flex items-center justify-between gap-3 pt-1">
+            <button onclick="navigateToView('sec1', 29)"
+              class="px-5 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-xs transition active:scale-95">
+              ← <span class="font-fzkai">第一部分</span> <span class="hidden sm:inline">(No. 30)</span>
+            </button>
+            <button onclick="navigateToView('sec3', 0)"
+              class="px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-md shadow-amber-500/20 transition active:scale-95">
+              <span class="font-fzkai">进入第三部分</span> <span class="hidden sm:inline">(Bagian III)</span> →
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function focusSec2Blank(idx) {
+      const sec2State = state.progress[state.currentPacket].sec2;
+      if (sec2State.statuses[idx] === true) return;
+      sec2State.activeBlank = idx;
+      renderStage();
+    }
+
+    function selectSec2Word(word) {
+      const pkt = QUIZ_PACKETS[state.currentPacket];
+      const sec2State = state.progress[state.currentPacket].sec2;
+      let idx = sec2State.activeBlank;
+
+      // If current blank is already solved, find first unsolved blank
+      if (sec2State.statuses[idx] === true) {
+        const nextUnsolved = sec2State.statuses.findIndex(s => s !== true);
+        if (nextUnsolved === -1) return;
+        idx = nextUnsolved;
+        sec2State.activeBlank = idx;
+      }
+
+      const item = pkt.sec2.items[idx];
+      const isRight = (word === item.ans);
+      const wasPreviouslyCorrect = (sec2State.statuses[idx] === true);
+
+      sec2State.answers[idx] = word;
+      sec2State.statuses[idx] = isRight;
+
+      if (isRight && !wasPreviouslyCorrect) {
+        updateGamificationStats(true, 10);
+        // Auto-advance activeBlank to next unsolved blank
+        const nextIdx = sec2State.statuses.findIndex((s, i) => i > idx && s !== true);
+        const fallbackIdx = sec2State.statuses.findIndex(s => s !== true);
+        if (nextIdx !== -1) sec2State.activeBlank = nextIdx;
+        else if (fallbackIdx !== -1) sec2State.activeBlank = fallbackIdx;
+      } else if (!isRight) {
+        updateGamificationStats(false, 0);
+      }
+
+      renderStage();
+    }
+
+    function resetSec2() {
+      playTone('click');
+      state.progress[state.currentPacket].sec2 = {
+        activeBlank: 0,
+        answers: Array(5).fill(null),
+        statuses: Array(5).fill(null)
+      };
+      renderAll();
+    }
+
+    /**
+     * ----------------------------------------------------------------------------
+     * VIEW 3: 三、连词成句 (1 SOAL DALAM 1 LAYAR)
+     * ----------------------------------------------------------------------------
+     */
+    function renderSec3Screen() {
+      const pkt = QUIZ_PACKETS[state.currentPacket];
+      const idx = state.viewIndex;
+      const item = pkt.sec3[idx];
+      const qState = state.progress[state.currentPacket].sec3[idx];
+
+      const placedWords = qState.placedIndices.map(tokIdx => item.tokens[tokIdx]);
+      const allPlaced = qState.placedIndices.length === item.tokens.length;
+
+      let boxStyle = "bg-amber-50/60 border-amber-300";
+      let animClass = "";
+      if (qState.isCorrect === true) {
+        boxStyle = "bg-emerald-50 border-emerald-500";
+        animClass = "anim-correct";
+      } else if (qState.isCorrect === false) {
+        boxStyle = "bg-red-50 border-red-500";
+        animClass = "anim-wrong";
+      }
+
+      return `
+        <div class="flex flex-col flex-1 justify-between gap-4">
+          <!-- Header -->
+          <div class="bg-white rounded-2xl p-4 sm:px-6 border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-100 px-2.5 py-1 rounded-lg">
+                ${pkt.label} • 三、连词成句（共 5 题）
+              </span>
+              <h2 class="font-fzkai text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                第 ${item.num} 题 <span class="text-slate-400 text-base font-ui font-normal">(${idx + 1} / 5)</span>
+              </h2>
+            </div>
+            <div class="text-xs sm:text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl">
+              Susun kata menjadi kalimat yang benar
+            </div>
+          </div>
+
+          <!-- Sentence Construction Card (1 Soal dalam 1 Layar) -->
+          <div class="bg-white rounded-3xl p-5 sm:p-8 lg:p-10 border border-slate-200 shadow-sm flex-1 flex flex-col justify-center">
+            
+            <div class="mb-3 flex items-center justify-between">
+              <span class="text-xs sm:text-sm font-bold text-slate-600">
+                ✍️ Susunan Kalimat Kamu (Klik kata di bawah untuk menyusun):
+              </span>
+              ${qState.placedIndices.length > 0 && qState.isCorrect !== true ? `
+                <button onclick="resetSec3Question()" class="text-xs font-bold text-red-600 hover:underline">
+                  🗑️ Hapus Semua
+                </button>
+              ` : ''}
+            </div>
+
+            <!-- Target Sentence Box -->
+            <div class="min-h-[6.5rem] p-4 sm:p-6 rounded-2xl border-2 border-dashed flex flex-wrap items-center gap-2.5 sm:gap-3 mb-7 transition-all ${boxStyle} ${animClass}">
+              <span class="font-fzkai q-text font-bold text-amber-600 mr-1">${item.num}.</span>
+              
+              ${placedWords.length === 0 ? `
+                <span class="text-slate-400 text-sm sm:text-base italic">Klik potongan kata di bawah untuk menyusun kalimat...</span>
+              ` : placedWords.map((word, posIdx) => {
+                let chipColor = "bg-amber-500 text-white border-amber-600 shadow-sm hover:bg-amber-600";
+                if (qState.isCorrect === true) chipColor = "bg-emerald-600 text-white border-emerald-700 shadow-md";
+                if (qState.isCorrect === false) chipColor = "bg-red-600 text-white border-red-700 shadow-md";
+
+                return `
+                  <button onclick="removeSec3Token(${posIdx})" ${qState.isCorrect === true ? 'disabled' : ''}
+                    class="px-4 py-2 rounded-xl font-fzkai q-text font-bold border-2 transition-all active:scale-95 ${chipColor}">
+                    ${word}
+                  </button>
+                `;
+              }).join('')}
+
+              <span class="font-fzkai q-text font-bold text-slate-800 ml-1">${item.punct}</span>
+            </div>
+
+            <!-- Source Word Tiles -->
+            <div class="mb-6">
+              <p class="text-xs font-bold text-slate-500 mb-2.5 uppercase tracking-wider">Potongan Kata (词语卡片):</p>
+              <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                ${qState.shuffledOrder.map((origTokIdx) => {
+                  const isUsed = qState.placedIndices.includes(origTokIdx);
+                  const word = item.tokens[origTokIdx];
+                  return `
+                    <button onclick="addSec3Token(${origTokIdx})" ${isUsed || qState.isCorrect === true ? 'disabled' : ''}
+                      class="px-5 py-3 rounded-2xl font-fzkai opt-text font-bold border-2 transition-all ${
+                        isUsed
+                          ? 'bg-slate-200 border-slate-300 text-slate-400 opacity-40 cursor-not-allowed scale-95'
+                          : 'bg-white hover:bg-amber-50 border-slate-300 hover:border-amber-500 text-slate-900 shadow-sm active:scale-95'
+                      }">
+                      ${word}
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Check / Retry Action Buttons -->
+            ${qState.isCorrect !== true ? `
+              <div class="flex flex-wrap items-center justify-center gap-3">
+                <button onclick="resetSec3Question()"
+                  class="px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm sm:text-base transition active:scale-95">
+                  🔄 Ulangi Susunan
+                </button>
+                <button onclick="checkSec3Answer()" ${!allPlaced ? 'disabled' : ''}
+                  class="px-7 py-3 rounded-2xl font-bold text-sm sm:text-base text-white shadow-md transition active:scale-95 ${
+                    allPlaced
+                      ? 'bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 shadow-emerald-500/25'
+                      : 'bg-slate-300 cursor-not-allowed'
+                  }">
+                  ✅ Periksa Kalimat (检查答案)
+                </button>
+              </div>
+            ` : ''}
+
+            <!-- Immediate Feedback Banner -->
+            ${qState.isCorrect !== null ? renderImmediateFeedbackBanner(
+              qState.isCorrect,
+              `Kalimat Benar: ${item.valid[0]}${item.punct}`,
+              item.hint
+            ) : ''}
+          </div>
+
+          <!-- Bottom Navigation -->
+          <div class="flex items-center justify-between gap-3 pt-1">
+            <button onclick="prevScreen()"
+              class="px-5 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-xs transition active:scale-95">
+              ← <span class="font-fzkai">${idx === 0 ? '第二部分' : '上一题'}</span> <span class="hidden sm:inline">(Sebelumnya)</span>
+            </button>
+            <button onclick="nextScreen()"
+              class="px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-md shadow-amber-500/20 transition active:scale-95">
+              <span class="font-fzkai">${idx === 4 ? '进入第四部分' : '下一题'}</span> <span class="hidden sm:inline">(Selanjutnya)</span> →
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function addSec3Token(origTokIdx) {
+      const qState = state.progress[state.currentPacket].sec3[state.viewIndex];
+      if (qState.isCorrect === true || qState.placedIndices.includes(origTokIdx)) return;
+      playTone('click');
+      // If previously marked wrong, clear wrong status so they can edit
+      if (qState.isCorrect === false) qState.isCorrect = null;
+      qState.placedIndices.push(origTokIdx);
+      renderStage();
+    }
+
+    function removeSec3Token(posIdx) {
+      const qState = state.progress[state.currentPacket].sec3[state.viewIndex];
+      if (qState.isCorrect === true) return;
+      playTone('click');
+      if (qState.isCorrect === false) qState.isCorrect = null;
+      qState.placedIndices.splice(posIdx, 1);
+      renderStage();
+    }
+
+    function resetSec3Question() {
+      playTone('click');
+      const qState = state.progress[state.currentPacket].sec3[state.viewIndex];
+      if (qState.isCorrect === true) return;
+      qState.placedIndices = [];
+      qState.isCorrect = null;
+      renderStage();
+    }
+
+    function checkSec3Answer() {
+      const pkt = QUIZ_PACKETS[state.currentPacket];
+      const item = pkt.sec3[state.viewIndex];
+      const qState = state.progress[state.currentPacket].sec3[state.viewIndex];
+      if (qState.placedIndices.length !== item.tokens.length) return;
+
+      const userSentence = qState.placedIndices.map(i => item.tokens[i]).join('');
+      const isRight = item.valid.includes(userSentence);
+
+      qState.isCorrect = isRight;
+      updateGamificationStats(isRight, 15);
+      renderStage();
+    }
+
+    /**
+     * ----------------------------------------------------------------------------
+     * VIEW 4: 四、阅读理解 (TEKS CERITA + 3 PERTANYAAN + SCROLLBOX JAWABAN DALAM 1 LAYAR)
+     * ----------------------------------------------------------------------------
+     */
+    function renderSec4Screen() {
+      const pkt = QUIZ_PACKETS[state.currentPacket];
+      const sec4Data = pkt.sec4;
+      const sec4State = state.progress[state.currentPacket].sec4;
+
+      return `
+        <div class="flex flex-col flex-1 justify-between gap-4">
+          <!-- Header -->
+          <div class="bg-white rounded-2xl p-4 sm:px-6 border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg">
+                ${pkt.label} • 四、阅读理解（共 3 题）
+              </span>
+              <h2 class="font-fzkai text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                第 41 – 43 题 <span class="text-sm font-ui font-normal text-slate-500">(Teks Cerita & Pertanyaan dalam 1 Layar)</span>
+              </h2>
+            </div>
+            <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl">
+              📜 Gulir kotak pilihan jawaban (Scrollbox)
+            </span>
+          </div>
+
+          <!-- Combined 1-Screen Layout: Story Passage + 3 Questions with Scrollbox Options -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+            
+            <!-- Left/Top: Reading Passage Card (阅读短文) -->
+            <div class="lg:col-span-5 bg-gradient-to-b from-amber-50/90 to-orange-50/50 rounded-3xl p-5 sm:p-6 border-2 border-amber-200 shadow-sm lg:sticky lg:top-20">
+              <div class="flex items-center gap-2 mb-3 pb-2.5 border-b border-amber-200/80">
+                <span class="text-xl">📖</span>
+                <h3 class="font-fzkai text-lg sm:text-xl font-bold text-amber-950">阅读短文 (Teks Bacaan)</h3>
+              </div>
+              <p class="font-fzkai story-text font-bold text-slate-900 indent-8 tracking-wide text-justify">
+                ${sec4Data.passage}
+              </p>
+            </div>
+
+            <!-- Right/Bottom: 3 Questions with Scrollbox Options -->
+            <div class="lg:col-span-7 space-y-4">
+              ${sec4Data.questions.map((qItem, qIdx) => {
+                const qSt = sec4State[qIdx];
+                const answered = qSt.selected !== null;
+
+                let cardBorder = "border-slate-200";
+                let animClass = "";
+                if (qSt.isCorrect === true) {
+                  cardBorder = "border-emerald-500 ring-2 ring-emerald-400/30";
+                  animClass = "anim-correct";
+                } else if (qSt.isCorrect === false) {
+                  cardBorder = "border-red-500 ring-2 ring-red-400/30";
+                  animClass = "anim-wrong";
+                }
+
+                return `
+                  <div class="bg-white rounded-3xl p-4 sm:p-5 border-2 shadow-sm transition-all ${cardBorder} ${animClass}">
+                    <!-- Question Title -->
+                    <div class="flex items-start justify-between gap-2 mb-3">
+                      <h4 class="font-fzkai q-text font-bold text-slate-900">
+                        <span class="text-emerald-700 mr-1.5">${qItem.num}.</span>${qItem.q}
+                      </h4>
+                      <span class="text-[11px] font-semibold text-slate-400 bg-slate-100 px-2 py-1 rounded-lg shrink-0">
+                        ↕ Scrollbox
+                      </span>
+                    </div>
+
+                    <!-- Scrollbox Container for Answer Options -->
+                    <div class="max-h-40 overflow-y-auto custom-scrollbox pr-1.5 space-y-2 rounded-2xl bg-slate-50/80 p-2.5 border border-slate-200/90">
+                      ${qItem.opts.map((optStr, oIdx) => {
+                        let optClass = "bg-white hover:bg-amber-50 border-slate-200 hover:border-amber-400 text-slate-800";
+                        let icon = "";
+
+                        if (answered) {
+                          if (oIdx === qItem.ans) {
+                            optClass = "bg-emerald-600 border-emerald-700 text-white font-bold shadow-sm";
+                            icon = "✅";
+                          } else if (oIdx === qSt.selected && !qSt.isCorrect) {
+                            optClass = "bg-red-600 border-red-700 text-white font-bold shadow-sm";
+                            icon = "❌";
+                          } else {
+                            optClass = "bg-slate-100 border-slate-200 text-slate-400 opacity-65";
+                          }
+                        }
+
+                        return `
+                          <button onclick="answerSec4(${qIdx}, ${oIdx})" ${answered ? 'disabled' : ''}
+                            class="w-full p-3 rounded-xl border-2 text-left flex items-center justify-between gap-2 transition-all active:scale-[0.99] ${optClass}">
+                            <span class="font-fzkai opt-text font-bold">${optStr}</span>
+                            <span class="text-xl shrink-0">${icon}</span>
+                          </button>
+                        `;
+                      }).join('')}
+                    </div>
+
+                    <!-- Instant Feedback Banner -->
+                    ${answered ? renderImmediateFeedbackBanner(
+                      qSt.isCorrect,
+                      `Jawaban Benar: ${qItem.opts[qItem.ans]}`,
+                      qItem.hint
+                    ) : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- Bottom Navigation -->
+          <div class="flex items-center justify-between gap-3 pt-1">
+            <button onclick="navigateToView('sec3', 4)"
+              class="px-5 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-xs transition active:scale-95">
+              ← <span class="font-fzkai">第三部分</span> <span class="hidden sm:inline">(No. 40)</span>
+            </button>
+            <button onclick="showSummaryModal()"
+              class="px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-md shadow-emerald-500/25 transition active:scale-95">
+              🏆 <span class="font-fzkai">完成练习 • 查看成绩</span> <span class="hidden sm:inline">(Selesai)</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function answerSec4(qIdx, oIdx) {
+      const pkt = QUIZ_PACKETS[state.currentPacket];
+      const qItem = pkt.sec4.questions[qIdx];
+      const qSt = state.progress[state.currentPacket].sec4[qIdx];
+      if (qSt.selected !== null) return;
+
+      qSt.selected = oIdx;
+      qSt.isCorrect = (oIdx === qItem.ans);
+      updateGamificationStats(qSt.isCorrect, 15);
+      renderStage();
+    }
+
+    /**
+     * ============================================================================
+     * SHARED FEEDBACK BANNER & SEQUENTIAL NAVIGATION
+     * ============================================================================
+     */
+    function renderImmediateFeedbackBanner(isCorrect, rightAnsText, hintText) {
+      if (isCorrect) {
+        return `
+          <div class="mt-4 p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-500 text-emerald-900 anim-banner flex items-start gap-3">
+            <span class="text-2xl sm:text-3xl shrink-0">🎉</span>
+            <div>
+              <div class="font-fzkai text-lg sm:text-xl font-bold text-emerald-700">
+                太棒了！回答正确！ <span class="font-ui text-sm font-extrabold uppercase ml-1">(BENAR!)</span>
+              </div>
+              <p class="text-xs sm:text-sm text-emerald-800 mt-0.5">${hintText}</p>
+            </div>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="mt-4 p-4 rounded-2xl bg-red-50 border-2 border-red-500 text-red-900 anim-banner flex items-start gap-3">
+            <span class="text-2xl sm:text-3xl shrink-0">💡</span>
+            <div>
+              <div class="font-fzkai text-lg sm:text-xl font-bold text-red-700">
+                再接再厉！回答错误！ <span class="font-ui text-sm font-extrabold uppercase ml-1">(SALAH!)</span>
+              </div>
+              <p class="font-fzkai text-base sm:text-lg font-bold text-emerald-700 mt-1">
+                ✅ ${rightAnsText}
+              </p>
+              <p class="text-xs sm:text-sm text-red-800 mt-0.5">${hintText}</p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function prevScreen() {
+      playTone('click');
+      if (state.viewSection === 'sec1' && state.viewIndex > 0) {
+        state.viewIndex--;
+      } else if (state.viewSection === 'sec2') {
+        state.viewSection = 'sec1';
+        state.viewIndex = 29;
+      } else if (state.viewSection === 'sec3') {
+        if (state.viewIndex > 0) state.viewIndex--;
+        else {
+          state.viewSection = 'sec2';
+          state.viewIndex = 0;
+        }
+      } else if (state.viewSection === 'sec4') {
+        state.viewSection = 'sec3';
+        state.viewIndex = 4;
+      }
+      renderAll();
+    }
+
+    function nextScreen() {
+      playTone('click');
+      if (state.viewSection === 'sec1') {
+        if (state.viewIndex < 29) state.viewIndex++;
+        else {
+          state.viewSection = 'sec2';
+          state.viewIndex = 0;
+        }
+      } else if (state.viewSection === 'sec2') {
+        state.viewSection = 'sec3';
+        state.viewIndex = 0;
+      } else if (state.viewSection === 'sec3') {
+        if (state.viewIndex < 4) state.viewIndex++;
+        else {
+          state.viewSection = 'sec4';
+          state.viewIndex = 0;
+        }
+      }
+      renderAll();
+    }
+
+    /**
+     * ============================================================================
+     * SUMMARY REPORT & RESET MODAL
+     * ============================================================================
+     */
+    function showSummaryModal() {
+      const pkt = QUIZ_PACKETS[state.currentPacket];
+      const prog = state.progress[state.currentPacket];
+
+      const s1Correct = prog.sec1.filter(x => x.isCorrect === true).length;
+      const s2Correct = prog.sec2.statuses.filter(x => x === true).length;
+      const s3Correct = prog.sec3.filter(x => x.isCorrect === true).length;
+      const s4Correct = prog.sec4.filter(x => x.isCorrect === true).length;
+      const totalCorrect = s1Correct + s2Correct + s3Correct + s4Correct;
+      const accuracy = Math.round((totalCorrect / 43) * 100);
+
+      if (totalCorrect >= 30) launchConfetti(70);
+
+      const modal = document.getElementById('custom-modal');
+      const card = document.getElementById('custom-modal-card');
+      card.innerHTML = `
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-3xl mb-3 shadow-inner">
+            🏆
+          </div>
+          <h3 class="font-fzkai text-2xl font-bold text-slate-900">${pkt.label} • 成绩单</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Rekap Hasil Latihan Pemantapan SAS</p>
+
+          <div class="my-5 p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-amber-50 border border-emerald-200">
+            <div class="text-4xl font-extrabold text-emerald-700">${prog.score} <span class="text-base font-fzkai">分</span></div>
+            <div class="text-sm font-semibold text-slate-600 mt-1">
+              Benar <span class="text-emerald-700 font-bold">${totalCorrect}</span> dari 43 soal (${accuracy}%)
+            </div>
+          </div>
+
+          <div class="space-y-2 text-left text-sm mb-6">
+            <div class="flex justify-between p-2.5 rounded-xl bg-slate-50">
+              <span class="font-fzkai font-bold">一、单项选择题 (30题)</span>
+              <span class="font-bold text-emerald-700">${s1Correct} / 30</span>
+            </div>
+            <div class="flex justify-between p-2.5 rounded-xl bg-slate-50">
+              <span class="font-fzkai font-bold">二、选词填空 (5题)</span>
+              <span class="font-bold text-emerald-700">${s2Correct} / 5</span>
+            </div>
+            <div class="flex justify-between p-2.5 rounded-xl bg-slate-50">
+              <span class="font-fzkai font-bold">三、连词成句 (5题)</span>
+              <span class="font-bold text-emerald-700">${s3Correct} / 5</span>
+            </div>
+            <div class="flex justify-between p-2.5 rounded-xl bg-slate-50">
+              <span class="font-fzkai font-bold">四、阅读理解 (3题)</span>
+              <span class="font-bold text-emerald-700">${s4Correct} / 3</span>
+            </div>
+          </div>
+
+          <div class="flex gap-2.5">
+            <button onclick="closeModal()" class="flex-1 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition">
+              Tutup
+            </button>
+            <button onclick="resetCurrentPacketNow()" class="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm transition">
+              🔄 Ulangi Paket
+            </button>
+          </div>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function confirmResetPacket() {
+      const pkt = QUIZ_PACKETS[state.currentPacket];
+      const modal = document.getElementById('custom-modal');
+      const card = document.getElementById('custom-modal-card');
+      card.innerHTML = `
+        <div class="text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-red-100 text-red-600 flex items-center justify-center text-2xl mb-3">
+            🔄
+          </div>
+          <h3 class="font-fzkai text-xl font-bold text-slate-900">Ulangi ${pkt.label}?</h3>
+          <p class="text-sm text-slate-600 mt-2">
+            Semua skor dan jawaban pada paket ini akan direset ke awal.
+          </p>
+          <div class="flex gap-2.5 mt-6">
+            <button onclick="closeModal()" class="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm">
+              Batal
+            </button>
+            <button onclick="resetCurrentPacketNow()" class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-sm">
+              Ya, Reset
+            </button>
+          </div>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function resetCurrentPacketNow() {
+      state.progress[state.currentPacket] = createEmptyPacketProgress(state.currentPacket);
+      state.viewSection = 'sec1';
+      state.viewIndex = 0;
+      closeModal();
+      renderAll();
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('custom-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAll();
+    });
+  </script>
+</body>
+</html>
